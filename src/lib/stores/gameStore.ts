@@ -110,7 +110,7 @@ export const totalLiabilities = derived(
     
     return (
       $currentAnswer.demandDeposits +
-      $currentAnswer.otherDeposits +
+      $currentAnswer.savingDeposits +
       $currentAnswer.otherLiabilities +
       $currentAnswer.ownerEquity
     );

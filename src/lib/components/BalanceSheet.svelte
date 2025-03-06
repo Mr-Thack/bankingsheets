@@ -3,12 +3,14 @@
   import { gameStore, currentQuestion, currentAnswer, totalAssets, totalLiabilities } from '$lib/stores/gameStore';
   import { Check, Eye, ArrowRight } from 'lucide-svelte';
   import ItemField from './ItemField.svelte';
-  
+  import { onMount } from 'svelte';
+
+
   let values = { ...$currentQuestion.initialState };
   let checkResult = null;
   let showingResult = false;
-  
-  
+  gameStore.updateAnswer(values);
+
   function reset() {
     values = { ...$currentQuestion.initialState };
     checkResult = null;
