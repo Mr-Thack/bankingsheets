@@ -9,7 +9,7 @@ export const questions = [
       securities: 5000,
       physicalAssets: 20000,
       demandDeposits: 1000,
-      otherDeposits: 5000,
+      savingDeposits: 5000,
       otherLiabilities: 3000,
       ownerEquity: 20000
     },
@@ -20,7 +20,7 @@ export const questions = [
       securities: 5000,
       physicalAssets: 20000,
       demandDeposits: 2000,
-      otherDeposits: 5000,
+      savingDeposits: 5000,
       otherLiabilities: 3000,
       ownerEquity: 20000
     }

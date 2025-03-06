@@ -17,12 +17,8 @@
   }
   
   function adjustValue(field, amount) {
-    // Tried incrementing Required Reserves here
-    console.log(values); // always says 100 here 
     values[field] += amount;
-    console.log(values); // always says 200 here 
     gameStore.updateAnswer(values);
-    console.log(values); // always says 200 here
   }
   
   function checkAnswer() {
@@ -45,7 +41,7 @@
   
   const liabilityFields = [
     { id: 'demandDeposits', label: 'Demand Deposits', increment: 1000 },
-    { id: 'otherDeposits', label: 'Other Deposits', increment: 1000 },
+    { id: 'savingDeposits', label: 'Saving Deposits', increment: 1000 },
     { id: 'otherLiabilities', label: 'Other Liabilities', increment: 1000 },
     { id: 'ownerEquity', label: 'Owner Equity', increment: 1000 }
   ];
