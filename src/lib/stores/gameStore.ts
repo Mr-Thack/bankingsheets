@@ -26,12 +26,12 @@ function createGameStore() {
       update(state => {
         const currentQuestionData = questions[state.currentQuestion];
         const currentAnswer = state.answers[state.currentQuestion];
-        
+
         if (!currentAnswer) return state;
-        
+
         let pointsForQuestion = 0;
-        const correct = { ...currentAnswer };
-        
+        const correct = {}; // Initialize as an empty object
+
         // Check each field in the answer
         Object.keys(currentQuestionData.correctState).forEach(field => {
           if (currentAnswer[field] === currentQuestionData.correctState[field]) {
@@ -42,16 +42,18 @@ function createGameStore() {
             correct[field] = false;
           }
         });
-        
-        const newAnswers = [...state.answers];
-        newAnswers[state.currentQuestion] = {
-          values: currentAnswer,
-          correct,
-          points: pointsForQuestion
+
+        const updatedAnswer = {
+          ...currentAnswer, // Keep the existing values
+          correct: correct, // Add the correct object
+          points: pointsForQuestion // Add the points
         };
-        
-        return { 
-          ...state, 
+
+        const newAnswers = [...state.answers];
+        newAnswers[state.currentQuestion] = updatedAnswer;
+
+        return {
+          ...state,
           answers: newAnswers,
           score: state.score + pointsForQuestion
         };
@@ -60,15 +62,15 @@ function createGameStore() {
     nextQuestion: () => {
       update(state => {
         const nextQuestionIndex = state.currentQuestion + 1;
-        
+
         if (nextQuestionIndex >= questions.length) {
-          return { 
-            ...state, 
+          return {
+            ...state,
             gameComplete: true,
-            endTime: new Date() 
+            endTime: new Date()
           };
         }
-        
+
         return { ...state, currentQuestion: nextQuestionIndex };
       });
     },
@@ -92,13 +94,13 @@ export const totalAssets = derived(
   currentAnswer,
   $currentAnswer => {
     if (!$currentAnswer) return 0;
-    
+
     return (
-      $currentAnswer.requiredReserves +
-      $currentAnswer.excessReserves +
-      $currentAnswer.loans +
-      $currentAnswer.securities +
-      $currentAnswer.physicalAssets
+      Number($currentAnswer.requiredReserves) + // Ensure these are numbers
+      Number($currentAnswer.excessReserves) +
+      Number($currentAnswer.loans) +
+      Number($currentAnswer.securities) +
+      Number($currentAnswer.physicalAssets)
     );
   }
 );
@@ -107,13 +109,14 @@ export const totalLiabilities = derived(
   currentAnswer,
   $currentAnswer => {
     if (!$currentAnswer) return 0;
-    
+
+    console.log($currentAnswer);
+
     return (
-      $currentAnswer.demandDeposits +
-      $currentAnswer.savingDeposits +
-      $currentAnswer.otherLiabilities +
-      $currentAnswer.ownerEquity
+      Number($currentAnswer.demandDeposits) + // Ensure these are numbers
+      Number($currentAnswer.savingDeposits) +
+      Number($currentAnswer.otherLiabilities) +
+      Number($currentAnswer.ownerEquity)
     );
   }
 );
-
