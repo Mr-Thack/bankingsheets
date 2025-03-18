@@ -17,6 +17,11 @@
     showingResult = false;
     gameStore.updateAnswer(values);
   }
+
+  function resetField(field) {
+    values[field] = $currentQuestion.initialState[field];
+    gameStore.updateAnswer(values);
+  }
   
   function adjustValue(field, amount) {
     values[field] += amount;
@@ -85,6 +90,7 @@
             value={values[field.id]}
             onIncrease={(amount) => adjustValue(field.id, amount)}
             onDecrease={(amount) => adjustValue(field.id, -amount)}
+            onReset={() => resetField(field.id)}
             increment={field.increment}
             showResult={showingResult}
             isCorrect={checkResult?.correct?.[field.id]}
@@ -109,6 +115,7 @@
             value={values[field.id]}
             onIncrease={(amount) => adjustValue(field.id, amount)}
             onDecrease={(amount) => adjustValue(field.id, -amount)}
+            onReset={() => resetField(field.id)}
             increment={field.increment}
             showResult={showingResult}
             isCorrect={checkResult?.correct?.[field.id]}

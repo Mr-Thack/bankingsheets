@@ -4,13 +4,14 @@
   export let value = 0;
   export let onIncrease = () => {};
   export let onDecrease = () => {};
+  export let onReset = () => {};
   export let increment = 100;
   export let showResult = false;
   export let isCorrect = false;
   export let correctValue = null;
 </script>
 
-<div class="grid grid-cols-[1fr_auto_auto] gap-2 items-center justify-between">
+<div class="grid grid-cols-[1fr_auto_auto_auto] gap-2 items-center justify-between">
   <div class="flex justify-between w-full">
     <span>{label}</span>
     <div class="flex items-center">
@@ -23,5 +24,6 @@
     </div>
   </div>
   <Button variant="outline" size="icon" class="bg-green-500 hover:bg-green-600" on:click={() => onIncrease(increment)}>+</Button>
+  <Button variant="outline" size="icon" class="bg-yellow-500 hover:bg-yellow-600" disabled={showResult} on:click={() => onReset()}>Undo</Button>
   <Button variant="outline" size="icon" class="bg-red-500 hover:bg-red-600" on:click={() => onDecrease(increment)}>-</Button>
 </div>
