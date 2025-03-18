@@ -7,14 +7,20 @@
   export let increment = 100;
   export let showResult = false;
   export let isCorrect = false;
+  export let correctValue = null;
 </script>
 
 <div class="grid grid-cols-[1fr_auto_auto] gap-2 items-center justify-between">
-  <div class="flex justify-between">
+  <div class="flex justify-between w-full">
     <span>{label}</span>
-    <span class="px-2" class:bg-green-200={showResult && isCorrect} class:bg-red-200={showResult && !isCorrect}>
-      ${value}
-    </span>
+    <div class="flex items-center">
+      <span class="px-2" class:bg-green-200={showResult && isCorrect} class:bg-red-200={showResult && !isCorrect}>
+        ${value}
+      </span>
+      {#if showResult && !isCorrect && correctValue !== null}
+        <span class="ml-2 text-green-600 font-medium">→ ${correctValue}</span>
+      {/if}
+    </div>
   </div>
   <Button variant="outline" size="icon" class="bg-green-500 hover:bg-green-600" on:click={() => onIncrease(increment)}>+</Button>
   <Button variant="outline" size="icon" class="bg-red-500 hover:bg-red-600" on:click={() => onDecrease(increment)}>-</Button>

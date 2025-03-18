@@ -1,6 +1,6 @@
 <script>
   import { Button } from '$lib/components/ui/button';
-  import { gameStore, currentQuestion, currentAnswer, totalAssets, totalLiabilities } from '$lib/stores/gameStore';
+  import { gameStore, currentQuestion, currentAnswer } from '$lib/stores/gameStore';
   import { Check, Eye, ArrowRight } from 'lucide-svelte';
   import ItemField from './ItemField.svelte';
   import { onMount } from 'svelte';
@@ -47,6 +47,25 @@
     { id: 'otherLiabilities', label: 'Other Liabilities', increment: 1000 },
     { id: 'ownerEquity', label: 'Owner Equity', increment: 1000 }
   ];
+
+  function calculateTotalAssets(currentValues) {
+    let total = 0;
+    assetFields.forEach(field => {
+      total += currentValues[field.id] || 0;
+    });
+    return total;
+  }
+
+  function calculateTotalLiabilities(currentValues) {
+    let total = 0;
+    liabilityFields.forEach(field => {
+      total += currentValues[field.id] || 0;
+    });
+    return total;
+  }
+
+  $: totalAssets = calculateTotalAssets(values);
+  $: totalLiabilities = calculateTotalLiabilities(values);
 </script>
 
 <div class="flex flex-col space-y-4 p-4">
@@ -69,12 +88,13 @@
             increment={field.increment}
             showResult={showingResult}
             isCorrect={checkResult?.correct?.[field.id]}
+            correctValue={showingResult ? $currentQuestion.correctState[field.id] : null}
           />
         {/each}
       </div>
       
       <div class="text-center font-bold border-t-2 border-black pt-2">
-        Totals: ${$totalAssets}
+          Totals: ${showingResult? calculateTotalAssets(checkResult.correctState) : totalAssets}
       </div>
     </div>
     
@@ -92,12 +112,13 @@
             increment={field.increment}
             showResult={showingResult}
             isCorrect={checkResult?.correct?.[field.id]}
+            correctValue={showingResult ? $currentQuestion.correctState[field.id] : null}
           />
         {/each}
       </div>
       
       <div class="text-center font-bold border-t-2 border-black pt-2">
-        Totals: ${$totalLiabilities}
+        Totals: ${showingResult? calculateTotalLiabilities(checkResult.correctState) : totalLiabilities}
       </div>
       
       <div class="flex justify-center space-x-4 mt-4">
@@ -105,8 +126,8 @@
           <Check class="w-5 h-5 mr-2" />
           Check Answer
         </Button>
-        <Button class="bg-yellow-400 hover:bg-yellow-500" on:click={reset}>
-          Reset
+        <Button class="bg-yellow-400 hover:bg-yellow-500" disabled={showingResult} on:click={reset}>
+          Reset All
         </Button>
         <Button class="bg-cyan-400 hover:bg-cyan-500" on:click={nextQuestion}>
           <ArrowRight class="w-5 h-5" />

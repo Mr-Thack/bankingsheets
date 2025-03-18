@@ -25,6 +25,7 @@ function createGameStore() {
     checkAnswer: () => {
       update(state => {
         const currentQuestionData = questions[state.currentQuestion];
+        console.log(currentQuestionData);
         const currentAnswer = state.answers[state.currentQuestion];
 
         if (!currentAnswer) return state;
@@ -46,6 +47,7 @@ function createGameStore() {
         const updatedAnswer = {
           ...currentAnswer, // Keep the existing values
           correct: correct, // Add the correct object
+          correctState: currentQuestionData.correctState,
           points: pointsForQuestion // Add the points
         };
 
@@ -88,35 +90,4 @@ export const currentQuestion = derived(
 export const currentAnswer = derived(
   gameStore,
   $gameStore => $gameStore.answers[$gameStore.currentQuestion]
-);
-
-export const totalAssets = derived(
-  currentAnswer,
-  $currentAnswer => {
-    if (!$currentAnswer) return 0;
-
-    return (
-      Number($currentAnswer.requiredReserves) + // Ensure these are numbers
-      Number($currentAnswer.excessReserves) +
-      Number($currentAnswer.loans) +
-      Number($currentAnswer.securities) +
-      Number($currentAnswer.physicalAssets)
-    );
-  }
-);
-
-export const totalLiabilities = derived(
-  currentAnswer,
-  $currentAnswer => {
-    if (!$currentAnswer) return 0;
-
-    console.log($currentAnswer);
-
-    return (
-      Number($currentAnswer.demandDeposits) + // Ensure these are numbers
-      Number($currentAnswer.savingDeposits) +
-      Number($currentAnswer.otherLiabilities) +
-      Number($currentAnswer.ownerEquity)
-    );
-  }
 );
