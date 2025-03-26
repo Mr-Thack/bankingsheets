@@ -35,6 +35,7 @@
   }
   
   function nextQuestion() {
+    showingResult = false;
     gameStore.nextQuestion();
   }
   
