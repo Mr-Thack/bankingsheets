@@ -1,5 +1,6 @@
 <script>
   import { Button } from '$lib/components/ui/button';
+  import { Plus, Minus, RotateCcw } from 'lucide-svelte';
   export let label = "";
   export let value = 0;
   export let onIncrease = () => {};
@@ -23,7 +24,14 @@
       {/if}
     </div>
   </div>
-  <Button variant="outline" size="icon" class="bg-green-500 hover:bg-green-600" on:click={() => onIncrease(increment)}>+</Button>
-  <Button variant="outline" size="icon" class="bg-yellow-500 hover:bg-yellow-600" disabled={showResult} on:click={() => onReset()}>Undo</Button>
-  <Button variant="outline" size="icon" class="bg-red-500 hover:bg-red-600" on:click={() => onDecrease(increment)}>-</Button>
+  <Button variant="outline" size="icon" class="bg-green-500 hover:bg-green-600" on:click={() => onIncrease(increment)}>
+    <Plus size={18} />
+  </Button>
+  <Button variant="outline" size="icon" class="bg-yellow-500 hover:bg-yellow-600" disabled={showResult} on:click={() => onReset()}>
+    <RotateCcw size={18} />
+  </Button>
+  <Button variant="outline" size="icon" class="bg-red-500 hover:bg-red-600" on:click={() => onDecrease(increment)}>
+    <Minus size={18} />
+  </Button>
+
 </div>
