@@ -43,7 +43,7 @@
     { id: 'requiredReserves', label: 'Required Reserves', increment: 100 },
     { id: 'excessReserves', label: 'Excess Reserves', increment: 100 },
     { id: 'loans', label: 'Loans', increment: 100 },
-    { id: 'securities', label: 'Securities (bonds)', increment: 100 },
+    { id: 'securities', label: 'Securities (bonds)', increment: 1000 },
     { id: 'physicalAssets', label: 'Physical Assets', increment: 100 }
   ];
   
@@ -72,6 +72,7 @@
 
   $: totalAssets = calculateTotalAssets(values);
   $: totalLiabilities = calculateTotalLiabilities(values);
+  $: answerPerfect = showingResult? (checkResult.points == 900) : false;
 </script>
 
 <div class="flex flex-col space-y-4 p-4">
@@ -145,8 +146,8 @@
   </div>
   
   {#if showingResult}
-    <div class="text-center text-2xl font-bold" class:text-green-600={checkResult.points > 0} class:text-red-600={checkResult.points < 0}>
-      {checkResult.points > 0 ? "Great Job! You got it!" : "Try again!"}
+    <div class="text-center text-2xl font-bold" class:text-green-600={answerPerfect} class:text-red-600={!answerPerfect}>
+      {answerPerfect ? "Great Job! You got it!" : $currentQuestion.explanation}
     </div>
   {/if}
 </div>
