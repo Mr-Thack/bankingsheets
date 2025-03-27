@@ -24,13 +24,13 @@
       {/if}
     </div>
   </div>
-  <Button variant="outline" size="icon" class="bg-green-500 hover:bg-green-600" disabled={showResult} on:click={() => onIncrease(increment)}>
+  <Button variant="outline" size="icon" class="bg-green-500 hover:bg-green-600 touch-none" disabled={showResult} on:click={() => onIncrease(increment)}>
     <Plus size={18} />
   </Button>
-  <Button variant="outline" size="icon" class="bg-yellow-500 hover:bg-yellow-600" disabled={showResult} on:click={() => onReset()}>
+  <Button variant="outline" size="icon" class="bg-yellow-500 hover:bg-yellow-600 touch-none" disabled={showResult} on:click={() => onReset()}>
     <RotateCcw size={18} />
   </Button>
-  <Button variant="outline" size="icon" class="bg-red-500 hover:bg-red-600" disabled={showResult} on:click={() => onDecrease(increment)}>
+  <Button variant="outline" size="icon" class="bg-red-500 hover:bg-red-600 touch-none" disabled={showResult} on:click={() => onDecrease(increment)}>
     <Minus size={18} />
   </Button>
 
