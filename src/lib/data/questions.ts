@@ -1,7 +1,114 @@
+/**
+ * ------------------------ DOCUMENTATION FOR questions.ts ------------------------
+ *
+ * This file contains an array of questions designed for an educational exercise
+ * related to bank balance sheets and basic banking transactions.
+ *
+ * PURPOSE:
+ * - Teach basic banking principles: Concepts like reserve requirements, loans,
+ *   deposits, securities, and their impact on a bank's balance sheet.
+ * - Provide interactive learning: Users might be expected to interact with these
+ *   questions, perhaps by manipulating a virtual balance sheet based on the scenario
+ *   and then checking against the `correctState`.
+ * - Assess understanding: The questions can be used to evaluate a user's comprehension
+ *   of balance sheet mechanics and banking transactions.
+ *
+ * CONTEXT FOR MODIFICATIONS:
+ * When modifying this file, maintain the educational integrity of the questions.
+ * Changes should be accurate from a basic banking/accounting perspective and should
+ * not introduce inconsistencies or errors in the balance sheet logic.
+ *
+ * ----------------------------- SCHEMA OF questions ARRAY -----------------------------
+ *
+ * The `questions` array is an array of JavaScript objects. Each object represents a
+ * single question and has the following properties:
+ *
+ *   id: number,             // Unique identifier for the question (positive integer, sequential)
+ *   scenario: string,       // Textual description of the banking scenario (the question itself)
+ *   initialState: BalanceSheetState, // Bank's balance sheet BEFORE the scenario
+ *   correctState: BalanceSheetState, // Bank's balance sheet AFTER the scenario (correct answer)
+ *   explanation: string      // Explanation of how initialState changes to correctState
+ *
+ * ----------------------------- BalanceSheetState SCHEMA -----------------------------
+ *
+ * The `BalanceSheetState` interface defines the structure of the bank's balance sheet.
+ * It is used for both `initialState` and `correctState`.
+ *
+ * interface BalanceSheetState {
+ *   requiredReserves: number; // ASSET: Legally required reserves
+ *   excessReserves: number;   // ASSET: Reserves held beyond required reserves
+ *   loans: number;            // ASSET: Money lent out by the bank
+ *   securities: number;       // ASSET: Bank investments in bonds etc. (often "Securities (bonds)")
+ *   physicalAssets: number;   // ASSET: Tangible assets like buildings, furniture
+ *   demandDeposits: number;   // LIABILITY: Funds in checking accounts (also "checkable deposits")
+ *   savingDeposits: number;   // LIABILITY: Funds in savings accounts (also "Other Deposits")
+ *   otherLiabilities: number; // LIABILITY: Other debts and obligations of the bank
+ *   ownerEquity: number;      // EQUITY: Owners' stake in the bank (net worth)
+ * }
+ *
+ * IMPORTANT INVARIANT: For any BalanceSheetState, Total Assets MUST equal Total Liabilities + Owner Equity:
+ * requiredReserves + excessReserves + loans + securities + physicalAssets  =  demandDeposits + savingDeposits + otherLiabilities + ownerEquity
+ *
+ * ----------------------------- ADDING NEW QUESTIONS -----------------------------
+ *
+ * 1. Determine the next `id`: Increment the highest existing `id` by 1.
+ * 2. Write the `scenario`: Create a clear, concise text description of the banking event.
+ * 3. Define `initialState`: Balance sheet BEFORE the scenario. Ensure it's a valid, balanced state.
+ * 4. Calculate `correctState`: Balance sheet AFTER the scenario. Must be valid, balanced, and logically consistent.
+ * 5. Write `explanation`: Explain the changes from `initialState` to `correctState`, detailing the banking principles.
+ * 6. Add the new question object to the `questions` array.
+ * 7. Verify: Ensure `id` is unique, `scenario` is clear, both states are valid balance sheets, `correctState` is logical, and `explanation` is accurate.
+ *
+ * ----------------------------- MODIFYING QUESTIONS -----------------------------
+ *
+ * 1. Identify the question by its `id`.
+ * 2. Modify the desired field (`scenario`, `initialState`, `correctState`, `explanation`).
+ * 3. Ensure Consistency: If modifying `scenario` or `initialState`, recalculate `correctState` and update `explanation`.
+ * 4. Verify: After modification, re-verify all points in step 7 of "ADDING NEW QUESTIONS".
+ *
+ * ----------------------------- HELPFUL CONTEXT FOR AI -----------------------------
+ *
+ * - Banking Principles: Basic understanding of balance sheets, reserve requirements, deposits, loans, securities.
+ * - Currency Consistency: All numerical values are in the same currency unit (e.g., US Dollars).
+ * - Educational Purpose: Accuracy and clarity are key. Avoid overly complex scenarios unless needed.
+ *
+ * ------------------------------------------------------------------------------------
+ */
+
+/**
+ * @interface BalanceSheetState
+ * Represents the state of a bank's balance sheet.
+ */
+interface BalanceSheetState {
+  requiredReserves: number;
+  excessReserves: number;
+  loans: number;
+  securities: number;
+  physicalAssets: number;
+  demandDeposits: number;
+  savingDeposits: number;
+  otherLiabilities: number;
+  ownerEquity: number;
+}
+
+/**
+ * @constant questions
+ * An array of questions, each representing a banking scenario and its impact on a balance sheet.
+ */
 export const questions = [
   {
+    /**
+     * @property id - Unique identifier for the question. Must be a sequential number.
+     */
     id: 1,
+    /**
+     * @property scenario - A textual description of the banking scenario. This is the question presented to the user.
+     */
     scenario: "Kayla goes to the bank and deposits $1000 in her checking account. The reserve requirement is 10%",
+    /**
+     * @property initialState - The bank's balance sheet before the scenario occurs.
+     * @type {BalanceSheetState}
+     */
     initialState: {
       requiredReserves: 100,
       excessReserves: 900,
@@ -13,6 +120,10 @@ export const questions = [
       otherLiabilities: 3000,
       ownerEquity: 20000
     },
+    /**
+     * @property correctState - The bank's balance sheet after the scenario has occurred. This is the expected correct answer.
+     * @type {BalanceSheetState}
+     */
     correctState: {
       requiredReserves: 200,
       excessReserves: 1800,
@@ -24,6 +135,10 @@ export const questions = [
       otherLiabilities: 3000,
       ownerEquity: 20000
     },
+    /**
+     * @property explanation - A textual explanation of how the initialState transforms into the correctState.
+     *                       Explains the banking principles behind the changes.
+     */
     explanation: "When Kayla deposits $1000 into her checking account, the checkable deposits increase to $2000. Since both sides must balance, $1000 is added to the assets side too. 10% ($100) goes into required reserves and the rest ($900) goes into excess reserves."
   },
   {
