@@ -37,6 +37,12 @@
   function nextQuestion() {
     showingResult = false;
     gameStore.nextQuestion();
+    values = { ...$currentQuestion.initialState };
+    checkResult = null;
+    // This update is just to populate the values with the initial values/answers. 
+    // For some reason, it doesn't do it automatically in the $currentAnswer store, but this bandaid fix should be sufficient
+    // The bug caused by this will only happen if the user doesn't modify the initial answer before submitting
+    gameStore.updateAnswer(values);
   }
   
   const assetFields = [
@@ -44,7 +50,7 @@
     { id: 'excessReserves', label: 'Excess Reserves', increment: 100 },
     { id: 'loans', label: 'Loans', increment: 100 },
     { id: 'securities', label: 'Securities (bonds)', increment: 1000 },
-    { id: 'physicalAssets', label: 'Physical Assets', increment: 100 }
+    { id: 'physicalAssets', label: 'Physical Assets', increment: 1000 }
   ];
   
   const liabilityFields = [
@@ -70,9 +76,13 @@
     return total;
   }
 
+  // There is a some lag between when we command the result to render,
+  // and between when the result is actually computed, for some reason. 
+  // So, we'll just use another variable. Bandaid fix, but it works.
+  $: resultReady = showingResult && checkResult;
   $: totalAssets = calculateTotalAssets(values);
   $: totalLiabilities = calculateTotalLiabilities(values);
-  $: answerPerfect = showingResult? (checkResult.points == 900) : false;
+  $: answerPerfect = resultReady? (checkResult.points == 900) : false;
 </script>
 
 <div class="flex flex-col space-y-4 p-4">
@@ -94,15 +104,15 @@
             onDecrease={(amount) => adjustValue(field.id, -amount)}
             onReset={() => resetField(field.id)}
             increment={field.increment}
-            showResult={showingResult}
+            showResult={resultReady}
             isCorrect={checkResult?.correct?.[field.id]}
-            correctValue={showingResult ? $currentQuestion.correctState[field.id] : null}
+            correctValue={resultReady ? $currentQuestion.correctState[field.id] : null}
           />
         {/each}
       </div>
       
       <div class="text-center font-bold border-t-2 border-black pt-2">
-          Totals: ${showingResult? calculateTotalAssets(checkResult.correctState) : totalAssets}
+          Totals: ${resultReady? calculateTotalAssets(checkResult.correctState) : totalAssets}
       </div>
     </div>
     
@@ -119,33 +129,33 @@
             onDecrease={(amount) => adjustValue(field.id, -amount)}
             onReset={() => resetField(field.id)}
             increment={field.increment}
-            showResult={showingResult}
+            showResult={resultReady}
             isCorrect={checkResult?.correct?.[field.id]}
-            correctValue={showingResult ? $currentQuestion.correctState[field.id] : null}
+            correctValue={resultReady ? $currentQuestion.correctState[field.id] : null}
           />
         {/each}
       </div>
       
       <div class="text-center font-bold border-t-2 border-black pt-2">
-        Totals: ${showingResult? calculateTotalLiabilities(checkResult.correctState) : totalLiabilities}
+        Totals: ${resultReady? calculateTotalLiabilities(checkResult.correctState) : totalLiabilities}
       </div>
       
       <div class="flex justify-center space-x-4 mt-4">
-        <Button class="bg-cyan-400 hover:bg-cyan-500" disabled={showingResult} on:click={checkAnswer}>
+        <Button class="bg-cyan-400 hover:bg-cyan-500" disabled={resultReady} on:click={checkAnswer}>
           <Check class="w-5 h-5 mr-2" />
           Check Answer
         </Button>
-        <Button class="bg-yellow-400 hover:bg-yellow-500" disabled={showingResult} on:click={reset}>
+        <Button class="bg-yellow-400 hover:bg-yellow-500" disabled={resultReady} on:click={reset}>
           Reset All
         </Button>
-        <Button class="bg-cyan-400 hover:bg-cyan-500" on:click={nextQuestion}>
+        <Button class="bg-cyan-400 hover:bg-cyan-500" disabled={!resultReady} on:click={nextQuestion}>
           <ArrowRight class="w-5 h-5" />
         </Button>
       </div>     
     </div>
   </div>
   
-  {#if showingResult}
+  {#if resultReady}
     <div class="text-center text-2xl font-bold" class:text-green-600={answerPerfect} class:text-red-600={!answerPerfect}>
       {answerPerfect ? "Great Job! You got it!" : $currentQuestion.explanation}
     </div>
